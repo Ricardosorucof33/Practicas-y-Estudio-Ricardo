@@ -1,0 +1,131 @@
+#include <iostream>
+using namespace std;
+#define MAX 100
+class Pila {
+private:
+    int datos[MAX];
+
+    int cima;
+public:
+    Pila();
+    void VerPila();
+    bool PilaVacia();
+    bool Insertar(int elemento);
+    void VerCima();
+    bool PilaLlena();
+    void tamanio();
+    bool Quitar();
+};
+
+int main()
+{
+    Pila p;
+    int opcion;
+    do {
+        cout << "1 Para cargar" << endl;
+        cout << "2 PilaVacia" << endl;
+        cout << "3 Pilallena" << endl;
+        cout << "4 VerPila" << endl;
+        cout << "5 Quitar" << endl;
+        cout << "6 VerCima" << endl;
+        cout << "7 tamanio" << endl;
+        cout << "0 salir" << endl;
+        cin >> opcion;
+        switch (opcion) {
+        case 1:
+            int x;
+            cout << "ingrese el dato" << endl;
+            cin >> x;
+            if (p.Insertar(x)) {
+                cout << "insertado" << endl;
+            }
+            else
+                cout << "pilaLLena" << endl;
+            break;
+        case 2:
+            if (p.PilaVacia())
+                cout << "esta Vacia" << endl;
+            else
+                cout << "no esta Vacia" << endl;
+            break;
+        case 3:
+            if (p.PilaLlena())
+                cout << "esta llena" << endl;
+            else
+                cout << "no esta llena" << endl;
+            break;
+        case 4:
+            p.VerPila();
+            break;
+        case 5:
+            if (p.Quitar()) {
+                cout << "retirado";
+            }
+            break;
+        case 6:
+            p.VerCima();
+            break;
+        case 7:
+            p.tamanio();
+            break;
+        case 0:
+            cout << "saliendo" << endl;
+            break;
+        default:
+            cout << "invalido" << endl;
+            break;
+        }
+    } while (opcion != 0);
+    return 0;
+}
+Pila::Pila() {
+    cima = -1;
+}
+void Pila::VerPila() {
+    for (int i = cima; i >= 0;i--) {
+        cout << "elemento " << i << " = " << datos[i] << endl;
+    }
+}
+bool Pila::PilaVacia() {
+    return cima == -1;
+}
+bool Pila::Insertar(int elemento) {
+    if (PilaLlena()) {
+        cout << "Pila LLena" << endl;
+        return false;
+    }
+    else
+        cima++;
+    datos[cima] = elemento;
+    return true;
+
+}
+void Pila::VerCima() {
+    int aux = 0;
+    if (PilaVacia()) {
+        cout << "Pila vacia" << endl;
+    }
+    else
+        aux = datos[cima];
+    cout << "La cima es " << aux << endl;
+}
+bool Pila::PilaLlena() {
+    return cima == MAX - 1;
+}
+void Pila::tamanio() {
+    int aux = 0;
+    if (PilaVacia())
+        cout << "Pila Vacia" << endl;
+    else
+        for (int i = cima;i >= 0;i--)
+            aux++;
+    cout << "tamanio= " << aux << endl;
+}
+bool Pila::Quitar() {
+    if (PilaVacia()) {
+        cout << "Pila vacia" << endl;
+        return false;
+    }
+    cima--;
+    return true;
+}
