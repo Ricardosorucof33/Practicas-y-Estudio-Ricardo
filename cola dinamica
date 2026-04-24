@@ -1,0 +1,141 @@
+#include<iostream>
+#define MAX 100
+using namespace std;
+class Nodo {
+public:
+	int dato;
+	Nodo* siguiente;
+	Nodo(int valor);
+};
+class Cola {
+private:
+	Nodo* frente;
+	Nodo* final;
+public:
+	Cola();
+	bool Cargar(int dato);
+	bool Desencolar();
+	void Tamanio();
+	void VerFrente();
+	void VerCola();
+	bool Vacia();
+};
+int main() {
+	Cola c;
+	int opcion, dato;
+
+	do {
+		cout << "\n===== MENU COLA DINAMICA =====\n";
+		cout << "1. Cargar (enqueue)\n";
+		cout << "2. Desencolar (dequeue)\n";
+		cout << "3. Ver frente\n";
+		cout << "4. Ver cola\n";
+		cout << "5. Tamanio\n";
+		cout << "0. Salir\n";
+		cout << "Seleccione una opcion: ";
+		cin >> opcion;
+
+		switch (opcion) {
+		case 1:
+			cout << "Ingrese dato: ";
+			cin >> dato;
+			c.Cargar(dato);
+			break;
+
+		case 2:
+			if (c.Desencolar())
+				cout << "Elemento eliminado\n";
+			break;
+
+		case 3:
+			c.VerFrente();
+			break;
+
+		case 4:
+			c.VerCola();
+			break;
+
+		case 5:
+			c.Tamanio();
+			break;
+
+		case 0:
+			cout << "Saliendo...\n";
+			break;
+
+		default:
+			cout << "Opcion invalida\n";
+		}
+
+	} while (opcion != 0);
+
+	return 0;
+}
+Nodo::Nodo(int valor) {
+	dato = valor;
+	siguiente=NULL;
+}
+Cola::Cola() {
+	final = NULL;
+	frente = NULL;
+
+}
+bool Cola::Cargar(int dato) {
+	Nodo* nuevo = new Nodo(dato);
+	if (Vacia()) {
+		frente = nuevo;
+		final = nuevo;
+	}
+	else {
+		final->siguiente = nuevo;
+		final = nuevo;
+	}
+		return true;	
+}
+bool Cola::Desencolar() {
+	if (Vacia()) {
+		cout << "Esta vacia" << endl;
+		return false;
+	}
+
+	Nodo* aux = frente;          // guardo el primero
+	frente = frente->siguiente;  // avanzo
+	if (frente == NULL) {        // si quedó vacía
+		final = NULL;
+	}
+	delete aux;                  // libero memoria
+	return true;
+}
+void Cola::Tamanio() {
+	int contador = 0;
+	Nodo* aux = frente;
+
+	while (aux != NULL) {
+		contador++;
+		aux = aux->siguiente;
+	}
+
+	cout << "Tamanio: " << contador << endl;
+}
+void Cola::VerFrente() {
+	if (Vacia()) {
+		cout << "Esta vacia" << endl;
+	}
+	else
+		cout << "el frente es " << frente->dato << endl;
+}
+void Cola::VerCola() {
+	if (Vacia()) {
+		cout << "Esta vacia" << endl;
+	}
+	else{
+		Nodo* aux = frente;
+		while (aux != NULL) {
+			cout << aux->dato << " -> ";
+			aux = aux->siguiente;
+		}	
+}
+}
+bool Cola::Vacia() {
+	return frente == NULL;
+}
