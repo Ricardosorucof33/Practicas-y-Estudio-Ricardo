@@ -1,0 +1,208 @@
+#include<iostream>
+using namespace std;
+
+class Nodo {
+public:
+    int dato;
+    Nodo* siguiente;
+    Nodo* anterior;
+
+    Nodo(int valor);
+};
+
+class ColaDoble {
+private:
+    Nodo* frente;
+    Nodo* final;
+
+public:
+    ColaDoble();
+
+    bool InsertarFrente(int dato);
+    bool InsertarFinal(int dato);
+    bool EliminarFrente();
+    bool EliminarFinal();
+
+    void VerFrente();
+    void VerCola();
+    void Tamanio();
+    bool Vacia();
+};
+
+int main() {
+    ColaDoble c;
+    int opcion, dato;
+
+    do {
+        cout << endl;
+        cout << "===== COLA DOBLE =====" << endl;
+        cout << "1. Insertar por frente" << endl;
+        cout << "2. Insertar por final" << endl;
+        cout << "3. Eliminar por frente" << endl;
+        cout << "4. Eliminar por final" << endl;
+        cout << "5. Ver frente" << endl;
+        cout << "6. Ver cola" << endl;
+        cout << "7. Tamanio" << endl;
+        cout << "0. Salir" << endl;
+        cout << "Opcion: ";
+        cin >> opcion;
+
+        switch (opcion) {
+        case 1:
+            cout << "Dato: ";
+            cin >> dato;
+            c.InsertarFrente(dato);
+            break;
+
+        case 2:
+            cout << "Dato: ";
+            cin >> dato;
+            c.InsertarFinal(dato);
+            break;
+
+        case 3:
+            c.EliminarFrente();
+            break;
+
+        case 4:
+            c.EliminarFinal();
+            break;
+
+        case 5:
+            c.VerFrente();
+            break;
+
+        case 6:
+            c.VerCola();
+            break;
+
+        case 7:
+            c.Tamanio();
+            break;
+
+        case 0:
+            cout << "Saliendo..." << endl;
+            break;
+
+        default:
+            cout << "Opcion invalida" << endl;
+        }
+
+    } while (opcion != 0);
+
+    return 0;
+}
+
+Nodo::Nodo(int valor) {
+    dato = valor;
+    siguiente = NULL;
+    anterior = NULL;
+}
+
+ColaDoble::ColaDoble() {
+    frente = NULL;
+    final = NULL;
+}
+
+bool ColaDoble::InsertarFrente(int dato) {
+    Nodo* nuevo = new Nodo(dato);
+
+    if (Vacia()) {
+        frente = nuevo;
+        final = nuevo;
+    } else {
+        nuevo->siguiente = frente;
+        frente->anterior = nuevo;
+        frente = nuevo;
+    }
+
+    return true;
+}
+
+bool ColaDoble::InsertarFinal(int dato) {
+    Nodo* nuevo = new Nodo(dato);
+
+    if (Vacia()) {
+        frente = nuevo;
+        final = nuevo;
+    } else {
+        final->siguiente = nuevo;
+        nuevo->anterior = final;
+        final = nuevo;
+    }
+
+    return true;
+}
+
+bool ColaDoble::EliminarFrente() {
+    if (Vacia()) {
+        cout << "Vacia" << endl;
+        return false;
+    }
+
+    Nodo* aux = frente;
+    frente = frente->siguiente;
+
+    if (frente == NULL) {
+        final = NULL;
+    } else {
+        frente->anterior = NULL;
+    }
+
+    delete aux;
+    return true;
+}
+
+bool ColaDoble::EliminarFinal() {
+    if (Vacia()) {
+        cout << "Vacia" << endl;
+        return false;
+    }
+
+    Nodo* aux = final;
+    final = final->anterior;
+
+    if (final == NULL) {
+        frente = NULL;
+    } else {
+        final->siguiente = NULL;
+    }
+
+    delete aux;
+    return true;
+}
+
+void ColaDoble::VerFrente() {
+    if (Vacia()) {
+        cout << "Vacia" << endl;
+    } else {
+        cout << "Frente: " << frente->dato << endl;
+    }
+}
+
+void ColaDoble::VerCola() {
+    Nodo* aux = frente;
+
+    while (aux != NULL) {
+        cout << aux->dato << " <-> ";
+        aux = aux->siguiente;
+    }
+
+    cout << "NULL" << endl;
+}
+
+void ColaDoble::Tamanio() {
+    int cont = 0;
+    Nodo* aux = frente;
+
+    while (aux != NULL) {
+        cont++;
+        aux = aux->siguiente;
+    }
+
+    cout << "Tamanio: " << cont << endl;
+}
+
+bool ColaDoble::Vacia() {
+    return frente == NULL;
+}
