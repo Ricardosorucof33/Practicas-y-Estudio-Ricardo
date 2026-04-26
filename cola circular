@@ -1,0 +1,162 @@
+#include<iostream>
+using namespace std;
+
+class Nodo {
+public:
+    int dato;
+    Nodo* siguiente;
+
+    Nodo(int valor);
+};
+
+class ColaCircular {
+private:
+    Nodo* frente;
+    Nodo* final;
+
+public:
+    ColaCircular();
+
+    bool Encolar(int dato);
+    bool Desencolar();
+
+    void VerCola();
+    void VerFrente();
+    void Tamanio();
+    bool Vacia();
+};
+
+int main() {
+    ColaCircular c;
+    int op, dato;
+
+    do {
+        cout << endl;
+        cout << "===== COLA CIRCULAR =====" << endl;
+        cout << "1. Encolar" << endl;
+        cout << "2. Desencolar" << endl;
+        cout << "3. Ver frente" << endl;
+        cout << "4. Ver cola" << endl;
+        cout << "5. Tamanio" << endl;
+        cout << "0. Salir" << endl;
+        cout << "Opcion: ";
+        cin >> op;
+
+        switch (op) {
+        case 1:
+            cout << "Dato: ";
+            cin >> dato;
+            c.Encolar(dato);
+            break;
+        case 2:
+            c.Desencolar();
+            break;
+        case 3:
+            c.VerFrente();
+            break;
+        case 4:
+            c.VerCola();
+            break;
+        case 5:
+            c.Tamanio();
+            break;
+        }
+
+    } while (op != 0);
+
+    return 0;
+}
+
+Nodo::Nodo(int valor) {
+    dato = valor;
+    siguiente = NULL;
+}
+
+ColaCircular::ColaCircular() {
+    frente = NULL;
+    final = NULL;
+}
+
+bool ColaCircular::Encolar(int dato) {
+    Nodo* nuevo = new Nodo(dato);
+
+    if (Vacia()) {
+        frente = nuevo;
+        final = nuevo;
+        nuevo->siguiente = nuevo; // 🔥 SE APUNTA A SÍ MISMO
+    }
+    else {
+        nuevo->siguiente = frente;
+        final->siguiente = nuevo;
+        final = nuevo;
+    }
+
+    return true;
+}
+
+bool ColaCircular::Desencolar() {
+    if (Vacia()) {
+        cout << "Vacia" << endl;
+        return false;
+    }
+
+    Nodo* aux = frente;
+
+    if (frente == final) {
+        frente = NULL;
+        final = NULL;
+    }
+    else {
+        frente = frente->siguiente;
+        final->siguiente = frente;
+    }
+
+    delete aux;
+    return true;
+}
+
+void ColaCircular::VerFrente() {
+    if (Vacia()) {
+        cout << "Vacia" << endl;
+    }
+    else {
+        cout << "Frente: " << frente->dato << endl;
+    }
+}
+
+void ColaCircular::VerCola() {
+    if (Vacia()) {
+        cout << "Vacia" << endl;
+        return;
+    }
+
+    Nodo* aux = frente;
+
+    do {
+        cout << aux->dato << " -> ";
+        aux = aux->siguiente;
+    } while (aux != frente);
+
+    cout << "(regresa al inicio)" << endl;
+}
+
+void ColaCircular::Tamanio() {
+    if (Vacia()) {
+        cout << "Tamanio: 0" << endl;
+        return;
+    }
+
+    int cont = 0;
+    Nodo* aux = frente;
+
+    do {
+        cont++;
+        aux = aux->siguiente;
+    } while (aux != frente);
+
+    cout << "Tamanio: " << cont << endl;
+}
+
+bool ColaCircular::Vacia() {
+    return frente == NULL;
+}
