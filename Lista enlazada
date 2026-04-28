@@ -1,0 +1,201 @@
+#include<iostream>
+using namespace std;
+
+class Nodo {
+public:
+    int dato;
+    Nodo* siguiente;
+    Nodo(int d);
+};
+
+class Lista {
+private:
+    Nodo* cabeza;
+public:
+    Lista();
+    bool Vacia();
+    void InsertarInicio(int d);
+    void InsertarFinal(int d);
+    void InsertarPosicion(int d, int pos);
+    int EliminarInicio();
+    int EliminarFinal();
+    void Mostrar();
+};
+
+int main() {
+    Lista l;
+    int op, dato, pos;
+
+    do {
+        cout << endl;
+        cout << "===== LISTA ENLAZADA =====" << endl;
+        cout << "1. Insertar al inicio" << endl;
+        cout << "2. Insertar al final" << endl;
+        cout << "3. Insertar en posicion" << endl;
+        cout << "4. Eliminar al inicio" << endl;
+        cout << "5. Eliminar al final" << endl;
+        cout << "6. Mostrar lista" << endl;
+        cout << "0. Salir" << endl;
+        cout << "Opcion: ";
+        cin >> op;
+
+        switch (op) {
+        case 1:
+            cout << "Dato: ";
+            cin >> dato;
+            l.InsertarInicio(dato);
+            break;
+
+        case 2:
+            cout << "Dato: ";
+            cin >> dato;
+            l.InsertarFinal(dato);
+            break;
+
+        case 3:
+            cout << "Dato: ";
+            cin >> dato;
+            cout << "Posicion: ";
+            cin >> pos;
+            l.InsertarPosicion(dato, pos);
+            break;
+
+        case 4:
+            cout << "Eliminado: " << l.EliminarInicio() << endl;
+            break;
+
+        case 5:
+            cout << "Eliminado: " << l.EliminarFinal() << endl;
+            break;
+
+        case 6:
+            l.Mostrar();
+            break;
+
+        case 0:
+            cout << "Saliendo..." << endl;
+            break;
+
+        default:
+            cout << "Opcion invalida" << endl;
+        }
+
+    } while (op != 0);
+
+    return 0;
+}
+
+// ================= IMPLEMENTACIONES =================
+
+Nodo::Nodo(int d) {
+    dato = d;
+    siguiente = NULL;
+}
+
+Lista::Lista() {
+    cabeza = NULL;
+}
+
+bool Lista::Vacia() {
+    return cabeza == NULL;
+}
+
+void Lista::InsertarInicio(int d) {
+    Nodo* nuevo = new Nodo(d);
+    nuevo->siguiente = cabeza;
+    cabeza = nuevo;
+}
+
+void Lista::InsertarFinal(int d) {
+    Nodo* nuevo = new Nodo(d);
+
+    if (Vacia()) {
+        cabeza = nuevo;
+        return;
+    }
+
+    Nodo* aux = cabeza;
+    while (aux->siguiente != NULL) {
+        aux = aux->siguiente;
+    }
+
+    aux->siguiente = nuevo;
+}
+
+void Lista::InsertarPosicion(int d, int pos) {
+    if (pos == 0) {
+        InsertarInicio(d);
+        return;
+    }
+
+    Nodo* nuevo = new Nodo(d);
+    Nodo* aux = cabeza;
+
+    for (int i = 0; i < pos - 1; i++) {
+        if (aux == NULL) {
+            cout << "Posicion invalida" << endl;
+            return;
+        }
+        aux = aux->siguiente;
+    }
+
+    nuevo->siguiente = aux->siguiente;
+    aux->siguiente = nuevo;
+}
+
+int Lista::EliminarInicio() {
+    if (Vacia()) {
+        cout << "Lista vacia" << endl;
+        return -1;
+    }
+
+    Nodo* aux = cabeza;
+    int dato = aux->dato;
+
+    cabeza = cabeza->siguiente;
+    delete aux;
+
+    return dato;
+}
+
+int Lista::EliminarFinal() {
+    if (Vacia()) {
+        cout << "Lista vacia" << endl;
+        return -1;
+    }
+
+    if (cabeza->siguiente == NULL) {
+        int dato = cabeza->dato;
+        delete cabeza;
+        cabeza = NULL;
+        return dato;
+    }
+
+    Nodo* aux = cabeza;
+
+    while (aux->siguiente->siguiente != NULL) {
+        aux = aux->siguiente;
+    }
+
+    int dato = aux->siguiente->dato;
+    delete aux->siguiente;
+    aux->siguiente = NULL;
+
+    return dato;
+}
+
+void Lista::Mostrar() {
+    if (Vacia()) {
+        cout << "Lista vacia" << endl;
+        return;
+    }
+
+    Nodo* aux = cabeza;
+
+    while (aux != NULL) {
+        cout << aux->dato << " -> ";
+        aux = aux->siguiente;
+    }
+
+    cout << "NULL" << endl;
+}
