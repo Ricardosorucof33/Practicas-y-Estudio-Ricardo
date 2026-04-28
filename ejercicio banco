@@ -1,0 +1,120 @@
+#include<iostream>
+#include<string>
+using namespace std;
+class Dato {
+public:
+	int ticket;
+	string nombre;
+	Dato();
+};
+class Nodo {
+public:
+	Nodo* siguiente;
+	Dato dato;
+	Nodo(Dato d);
+};
+
+class Cola {
+private:
+	Nodo* frente;
+	Nodo* final;
+public:
+	Cola();
+	bool insertar(Dato d);
+	bool Pop();
+	void VerCola();
+	bool Vacia();
+};
+int main() {
+	Cola c;
+	Dato d;
+	int op;
+	do {
+		cout << "1 para registrar cliente" << endl;
+		cout << "2 para atender cliente" << endl;
+		cout << "3 para ver cola" << endl;
+		cout << "0 para salir" << endl;
+		cin >> op;
+		switch (op) {
+		case 1:
+			cout << "ingrese nombre " << endl;
+			cin.ignore();
+			getline(cin, d.nombre);
+			cout << "ingrese ticket " << endl;
+			cin >> d.ticket;
+			if (c.insertar(d))
+				cout << "insertado" << endl;
+			break;
+		case 2:
+			if (c.Pop())
+				cout << "clliente atendido y retirado de la fila" << endl;
+			break;
+		case 3:
+			c.VerCola();
+			break;
+		case 0:
+			cout << "adios" << endl;
+			return 0;
+
+		default:
+			cout << "invalido" << endl;
+			break;
+		}
+	} while (op != 0);
+	return 0;
+}
+
+Nodo::Nodo(Dato d) {
+	dato = d;
+	siguiente = NULL;
+}
+Cola::Cola() {
+	frente = NULL;
+	final = NULL;
+}
+Dato::Dato() {
+	nombre = "";
+	ticket = 0;
+}
+bool Cola::insertar(Dato d) {
+	Nodo* nuevo = new Nodo(d);
+	if (Vacia()) {
+		frente = nuevo;
+		final = nuevo;
+		return true;
+	}
+	else {
+		final->siguiente = nuevo;
+		final = nuevo;
+		return true;
+	}
+}
+bool Cola::Pop() {
+	if (Vacia()) {
+		cout << "vacia";
+		final = NULL;
+		return false;
+	}
+	else {
+		Nodo* aux = frente;
+		frente = frente->siguiente;
+		delete aux;
+		return true;
+	}
+}
+void Cola::VerCola() {
+	if (Vacia()) {
+		cout << "vacia";
+	}
+	else {
+		Nodo* aux = frente;
+		while (aux != NULL) {
+			cout << "nombre " << aux->dato.nombre << endl;
+			cout << "ticket " << aux->dato.ticket << endl;
+			aux = aux->siguiente;
+		}
+	}
+}
+bool Cola::Vacia() {
+	return frente == NULL;
+}
