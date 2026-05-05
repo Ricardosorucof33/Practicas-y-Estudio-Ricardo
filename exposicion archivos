@@ -1,0 +1,24 @@
+#include <iostream>
+#include <fstream>  // Librería para manejo de archivos
+using namespace std;
+
+int main() {
+    // ===== ESCRIBIR EN UN ARCHIVO =====
+    ofstream archivoSalida("ejemplo.txt");  // Crear o abrir archivo
+
+    archivoSalida << "Hola, este es un archivo en C++." << endl;
+
+    archivoSalida.close();  // Cerrar archivo
+
+    // ===== LEER EL ARCHIVO =====
+    ifstream archivoEntrada("ejemplo.txt");
+    string linea;
+
+    while (getline(archivoEntrada, linea)) {
+        cout << linea << endl;
+    }
+
+    archivoEntrada.close();  // Cerrar archivo
+
+    return 0;
+}
