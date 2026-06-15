@@ -1,0 +1,43 @@
+
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+void Leer(){
+ifstream archivo("datos.txt", ios::in);
+if(!archivo.is_open())
+return;
+string linea;
+while(getline(archivo,linea))
+cout<<linea<<endl;
+}
+
+void escribirtexto(){
+ofstream archivo("datos.txt", ios::out);
+if(archivo.is_open())
+archivo<<"hola Mundo"<<endl;
+}
+
+void agregarBinario(Dato nuevoDato) {
+    // ios::out (escribir) | ios::binary (formato crudo) | ios::app (al final)
+    ofstream fsalida("autos.dat", ios::out | ios::binary | ios::app);
+    
+    if (fsalida.is_open()) {
+        // reinterpret_cast<char*>(&nuevoDato): Transforma la dirección de memoria del struct en un puntero a caracteres (bytes).
+        // sizeof(nuevoDato): Le dice exactamente cuántos bytes debe copiar desde esa dirección.
+        fsalida.write(reinterpret_cast<char*>(&nuevoDato), sizeof(nuevoDato));
+    }
+}
+
+void listarBinario() {
+    // ios::in (leer) | ios::binary (formato crudo)
+    ifstream fentrada("autos.dat", ios::in | ios::binary);
+    
+    if (!fentrada.is_open()) return;
+
+    Dato d;
+    // .read() extrae la cantidad exacta de bytes (sizeof(d)) y los amolda al espacio de memoria de 'd'.
+    while (fentrada.read(reinterpret_cast<char*>(&d), sizeof(d))) {
+        cout << "Placa: " << d.placa << " | Modelo: " << d.modelo << endl;
+    }
+}
